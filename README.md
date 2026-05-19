@@ -117,9 +117,9 @@ palzcare/
 
 ## Gründerin
 
-**Gülsen Kitzel (Gülli)** — Sologründerin, Mutter, Musikerin aus Maxdorf, Pfalz.
+**Gülsen Kitzel (Gülli)** — Sologründerin, Mutter, Musikerin aus dem Rheinpfalz Kreis.
 
-Weitere Projekte: [Inimei Tech](https://inimei01.com) · PFALZ | WEBSITES®
+Weitere Projekte: [Inimei Tech](https://inimei01.com)
 
 ---
 
