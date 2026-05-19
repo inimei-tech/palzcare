@@ -1,1 +1,880 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PalzCare – App Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bordeaux: #9B2556;
+    --bordeaux-light: #c4356e;
+    --bordeaux-pale: #f9eef3;
+    --mint: #5BBFB5;
+    --mint-light: #7fd4cb;
+    --mint-pale: #eaf7f6;
+    --anthrazit: #2D2D2D;
+    --gray-light: #f4f4f2;
+    --gray-mid: #e0ddd8;
+    --gray-text: #666;
+    --white: #fff;
+    --font-serif: 'Lora', Georgia, serif;
+    --font-sans: 'Source Sans 3', sans-serif;
+    --radius: 16px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(45,45,45,0.10);
+    --shadow-sm: 0 2px 8px rgba(45,45,45,0.07);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: #f0ede8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ─── PITCH HEADER ─── */
+  .pitch-header {
+    width: 100%;
+    background: var(--anthrazit);
+    color: var(--white);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .pitch-header .logo {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+  .pitch-header .logo span { color: var(--mint); }
+  .pitch-badge {
+    font-size: 11px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--mint);
+    border: 1px solid var(--mint);
+    padding: 4px 12px;
+    border-radius: 20px;
+    opacity: 0.85;
+  }
+  .pitch-tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    font-style: italic;
+  }
+
+  /* ─── LAYOUT ─── */
+  .stage {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 32px;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  /* ─── PHONE FRAME ─── */
+  .phone-wrap {
+    flex-shrink: 0;
+    position: relative;
+  }
+  .phone {
+    width: 360px;
+    min-height: 720px;
+    background: var(--white);
+    border-radius: 36px;
+    border: 3px solid var(--anthrazit);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(45,45,45,0.22), 0 0 0 6px rgba(45,45,45,0.06);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .phone-notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 26px;
+    background: var(--anthrazit);
+    border-radius: 0 0 18px 18px;
+    z-index: 10;
+  }
+
+  /* ─── APP SCREENS ─── */
+  .screen {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    min-height: 720px;
+  }
+  .screen.active { display: flex; }
+
+  /* STATUS BAR */
+  .status-bar {
+    height: 44px;
+    background: var(--bordeaux);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 20px 6px;
+    flex-shrink: 0;
+  }
+  .status-bar span { color: rgba(255,255,255,0.85); font-size: 11px; font-weight: 600; }
+
+  /* APP HEADER */
+  .app-header {
+    background: var(--bordeaux);
+    padding: 12px 20px 20px;
+    flex-shrink: 0;
+  }
+  .app-header .app-logo {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+  .app-header .app-logo span { color: var(--mint-light); }
+  .app-header .greeting {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* SCROLL CONTENT */
+  .scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--gray-light);
+    padding-bottom: 80px;
+  }
+
+  /* SECTION */
+  .section { padding: 16px 16px 0; }
+  .section-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    margin-bottom: 10px;
+  }
+
+  /* HERO CARD */
+  .hero-card {
+    background: linear-gradient(135deg, var(--bordeaux) 0%, #7a1c42 100%);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 16px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-card::after {
+    content: '';
+    position: absolute;
+    right: -20px; bottom: -20px;
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .hero-card h2 { font-family: var(--font-serif); font-size: 20px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+  .hero-card p { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.5; margin-bottom: 14px; }
+  .hero-btn {
+    display: inline-block;
+    background: var(--mint);
+    color: var(--anthrazit);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .hero-btn:hover { transform: scale(1.03); }
+
+  /* ROLE TOGGLE */
+  .role-toggle {
+    display: flex;
+    gap: 8px;
+    padding: 16px 16px 0;
+  }
+  .role-btn {
+    flex: 1;
+    padding: 12px 8px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--gray-mid);
+    background: var(--white);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: var(--font-sans);
+  }
+  .role-btn .role-icon { font-size: 22px; margin-bottom: 4px; }
+  .role-btn .role-label { font-size: 12px; font-weight: 600; color: var(--anthrazit); }
+  .role-btn .role-sub { font-size: 10px; color: var(--gray-text); margin-top: 2px; }
+  .role-btn.active { border-color: var(--bordeaux); background: var(--bordeaux-pale); }
+  .role-btn.active .role-label { color: var(--bordeaux); }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-serif);
+    font-size: 16px;
+    font-weight: 600;
+    flex-shrink: 0;
+    color: white;
+  }
+  .av-bordeaux { background: var(--bordeaux); }
+  .av-mint { background: var(--mint); color: var(--anthrazit); }
+  .av-amber { background: #d4a020; }
+  .card-name { font-size: 15px; font-weight: 600; color: var(--anthrazit); margin-bottom: 2px; }
+  .card-meta { font-size: 12px; color: var(--gray-text); }
+  .tag {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 4px;
+    margin-top: 6px;
+  }
+  .tag-bordeaux { background: var(--bordeaux-pale); color: var(--bordeaux); }
+  .tag-mint { background: var(--mint-pale); color: #3a9990; }
+  .tag-gray { background: var(--gray-light); color: var(--gray-text); }
+  .card-footer { border-top: 1px solid var(--gray-light); margin-top: 12px; padding-top: 12px; display: flex; gap: 8px; }
+  .btn-sm {
+    flex: 1;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    border: none;
+    transition: transform 0.1s;
+    text-align: center;
+  }
+  .btn-primary { background: var(--bordeaux); color: white; }
+  .btn-secondary { background: var(--mint-pale); color: #3a9990; border: 1px solid var(--mint); }
+  .btn-sm:hover { transform: scale(1.02); }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex;
+    gap: 8px;
+    margin: 16px 16px 0;
+  }
+  .stat-card {
+    flex: 1;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-num { font-family: var(--font-serif); font-size: 22px; color: var(--bordeaux); font-weight: 600; }
+  .stat-label { font-size: 10px; color: var(--gray-text); margin-top: 2px; line-height: 1.3; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 68px;
+    background: var(--white);
+    border-top: 1px solid var(--gray-mid);
+    display: flex;
+    z-index: 5;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: var(--font-sans);
+    transition: opacity 0.15s;
+    padding-bottom: 6px;
+  }
+  .nav-item svg { width: 22px; height: 22px; stroke: var(--gray-text); stroke-width: 1.8; fill: none; }
+  .nav-item span { font-size: 10px; color: var(--gray-text); font-weight: 600; }
+  .nav-item.active svg { stroke: var(--bordeaux); }
+  .nav-item.active span { color: var(--bordeaux); }
+
+  /* ─── FORM SCREEN ─── */
+  .form-header {
+    background: var(--bordeaux);
+    padding: 44px 20px 20px;
+    flex-shrink: 0;
+  }
+  .form-header h1 { font-family: var(--font-serif); font-size: 22px; color: white; font-weight: 600; }
+  .form-header p { font-size: 13px; color: rgba(255,255,255,0.72); margin-top: 4px; font-style: italic; }
+
+  .form-body { flex: 1; overflow-y: auto; padding: 20px 16px 90px; background: var(--gray-light); }
+
+  .form-section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+    color: var(--gray-text); margin: 16px 0 8px;
+  }
+  .form-row { margin-bottom: 12px; }
+  .form-label { font-size: 13px; font-weight: 600; color: var(--anthrazit); margin-bottom: 4px; display: block; }
+  .form-hint { font-size: 11px; color: var(--gray-text); margin-top: 3px; }
+  .form-input {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--white);
+    border: 1.5px solid var(--gray-mid);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--anthrazit);
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-input:focus { outline: none; border-color: var(--bordeaux); }
+  .form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  .chip-group { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--gray-mid);
+    background: var(--white);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--anthrazit);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+  }
+  .chip.selected { border-color: var(--bordeaux); background: var(--bordeaux-pale); color: var(--bordeaux); }
+  .chip.selected-mint { border-color: var(--mint); background: var(--mint-pale); color: #3a9990; }
+
+  .privacy-note {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--mint-pale);
+    border: 1px solid rgba(91,191,181,0.3);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: #3a9990;
+    line-height: 1.5;
+  }
+  .privacy-note svg { width: 18px; height: 18px; flex-shrink: 0; fill: none; stroke: var(--mint); stroke-width: 2; margin-top: 1px; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--bordeaux);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-serif);
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    letter-spacing: 0.2px;
+    transition: transform 0.15s, background 0.2s;
+  }
+  .submit-btn:hover { background: var(--bordeaux-light); transform: scale(1.01); }
+
+  /* ─── PROFILE SCREEN ─── */
+  .profile-header {
+    background: var(--bordeaux);
+    padding: 44px 20px 28px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .profile-av {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-serif); font-size: 26px; font-weight: 600;
+    color: var(--bordeaux); margin: 0 auto 10px;
+    border: 3px solid rgba(255,255,255,0.4);
+  }
+  .profile-name { font-family: var(--font-serif); font-size: 20px; color: white; font-weight: 600; }
+  .profile-role { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+  .profile-body { flex: 1; overflow-y: auto; background: var(--gray-light); padding: 16px 16px 90px; }
+
+  .profile-section {
+    background: white; border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .profile-section h3 { font-size: 13px; font-weight: 600; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .profile-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--gray-light); font-size: 14px; }
+  .profile-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .profile-row span:first-child { color: var(--gray-text); }
+  .profile-row span:last-child { color: var(--anthrazit); font-weight: 600; }
+  .badge-verified { background: var(--mint-pale); color: #3a9990; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 10px; }
+  .badge-pending { background: #fff8e0; color: #c08000; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 10px; }
+  .rating-stars { color: #f0a500; font-size: 14px; letter-spacing: 1px; }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+  }
+  .sidebar-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .sidebar-card h3 {
+    font-family: var(--font-serif);
+    font-size: 16px; font-weight: 600;
+    color: var(--anthrazit);
+    margin-bottom: 4px;
+  }
+  .sidebar-card p { font-size: 13px; color: var(--gray-text); line-height: 1.5; margin-bottom: 12px; }
+  .nav-list { list-style: none; }
+  .nav-list li { padding: 9px 0; border-bottom: 1px solid var(--gray-light); cursor: pointer; }
+  .nav-list li:last-child { border-bottom: none; }
+  .nav-list li button {
+    background: none; border: none; font-family: var(--font-sans);
+    font-size: 14px; color: var(--anthrazit); cursor: pointer;
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 0; font-weight: 400;
+    transition: color 0.15s;
+  }
+  .nav-list li button:hover { color: var(--bordeaux); }
+  .nav-list li button.active-nav { color: var(--bordeaux); font-weight: 600; }
+  .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gray-mid); flex-shrink: 0;
+  }
+  .nav-dot.active { background: var(--bordeaux); }
+
+  .cryptpad-note {
+    background: var(--mint-pale);
+    border: 1px solid rgba(91,191,181,0.35);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: 12px;
+    color: #3a9990;
+    line-height: 1.6;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .cryptpad-note svg { flex-shrink: 0; width: 16px; height: 16px; stroke: var(--mint); stroke-width: 2; fill: none; margin-top: 1px; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .screen.active > * { animation: fadeUp 0.3s ease forwards; }
+
+  /* ─── FORM SCREEN IFRAME EMBED ─── */
+  .cryptpad-embed-wrap {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-top: 0;
+    position: relative;
+  }
+  .cryptpad-embed-wrap iframe {
+    width: 100%;
+    height: 520px;
+    border: none;
+    display: block;
+  }
+  .embed-label {
+    font-size: 11px;
+    color: var(--gray-text);
+    text-align: center;
+    padding: 8px;
+    background: var(--gray-light);
+    border-top: 1px solid var(--gray-mid);
+  }
+
+  /* ─── SUCCESS STATE ─── */
+  .success-overlay {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    padding: 40px 24px;
+    background: var(--gray-light);
+  }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: var(--mint-pale);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .success-icon svg { width: 36px; height: 36px; stroke: var(--mint); stroke-width: 2; fill: none; }
+  .success-overlay h2 { font-family: var(--font-serif); font-size: 22px; color: var(--anthrazit); margin-bottom: 10px; }
+  .success-overlay p { font-size: 14px; color: var(--gray-text); line-height: 1.6; }
+
+  /* PITCH FOOTER */
+  .pitch-footer {
+    width: 100%;
+    background: var(--anthrazit);
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+    font-size: 11px;
+    padding: 12px;
+    letter-spacing: 0.3px;
+    margin-top: auto;
+  }
+</style>
+</head>
+<body>
+
+
+<div class="stage">
+
+  <!-- PHONE -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-notch"></div>
+
+      <!-- ════ SCREEN: HOME ════ -->
+      <div class="screen active" id="screen-home">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span>Pfalz ●●●●</span>
+        </div>
+        <div class="app-header">
+          <div class="app-logo">Palz<span>Care</span></div>
+          <div class="greeting">Guten Morgen, schön, dass Sie da sind.</div>
+        </div>
+        <div class="scroll-content">
+          <!-- Role toggle -->
+          <div class="role-toggle">
+            <div class="role-btn active" id="role-help" onclick="setRole('help')">
+              <div class="role-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="12" y1="2" x2="12" y2="4"/></svg></div>
+              <div class="role-label">Ich brauche Hilfe</div>
+              <div class="role-sub">Entlastung im Alltag</div>
+            </div>
+            <div class="role-btn" id="role-helper" onclick="setRole('helper')">
+              <div class="role-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg></div>
+              <div class="role-label">Ich helfe gerne</div>
+              <div class="role-sub">Fair vergütet</div>
+            </div>
+          </div>
+
+          <!-- Hero Card -->
+          <div class="hero-card">
+            <h2>Hilfe in Ihrer Nähe — direkt & verlässlich</h2>
+            <p>Verifizierte Helfer:innen aus Ihrer Region. Kein Ehrenamt — faire Bezahlung für echte Unterstützung.</p>
+            <button class="hero-btn" onclick="showScreen('register')">Jetzt eintragen →</button>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-num" id="stat-count">—</div>
+              <div class="stat-label">Personen im Pool</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">5</div>
+              <div class="stat-label">Gemeinden aktiv</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">≥ €14</div>
+              <div class="stat-label">Std.-Honorar</div>
+            </div>
+          </div>
+
+          <!-- Helfer Cards -->
+          <div class="section">
+            <div class="section-title" id="card-label">Aktuelle Helfer:innen</div>
+
+            <div class="card" id="cards-help">
+              <div class="card-row">
+                <div class="avatar av-mint">LM</div>
+                <div>
+                  <div class="card-name">Laura M.</div>
+                  <div class="card-meta">Maxdorf · Studentin · ab €14/h</div>
+                </div>
+              </div>
+              <div>
+                <span class="tag tag-mint">Einkaufen</span>
+                <span class="tag tag-mint">Haushalt</span>
+                <span class="tag tag-gray">2× / Woche</span>
+              </div>
+              <div class="card-footer">
+                <button class="btn-sm btn-secondary">Profil ansehen</button>
+                <button class="btn-sm btn-primary">Anfragen</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-row">
+                <div class="avatar av-bordeaux">TK</div>
+                <div>
+                  <div class="card-name">Thomas K.</div>
+                  <div class="card-meta">Lambsheim · Rentner · ab €12/h</div>
+                </div>
+              </div>
+              <div>
+                <span class="tag tag-bordeaux">Gartenarbeit</span>
+                <span class="tag tag-bordeaux">Begleitung</span>
+                <span class="tag tag-gray">Flexibel</span>
+              </div>
+              <div class="card-footer">
+                <button class="btn-sm btn-secondary">Profil ansehen</button>
+                <button class="btn-sm btn-primary">Anfragen</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-row">
+                <div class="avatar av-amber">SB</div>
+                <div>
+                  <div class="card-name">Sarah B.</div>
+                  <div class="card-meta">Ruchheim · Teilzeit · ab €15/h</div>
+                </div>
+              </div>
+              <div>
+                <span class="tag tag-mint">Kinderbetreuung</span>
+                <span class="tag tag-mint">Kochen</span>
+              </div>
+              <div class="card-footer">
+                <button class="btn-sm btn-secondary">Profil ansehen</button>
+                <button class="btn-sm btn-primary">Anfragen</button>
+              </div>
+            </div>
+          </div>
+          <div style="margin: 12px 16px 0; background: var(--white); border-radius: var(--radius-sm); border: 1px solid var(--gray-mid); padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9B2556" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span style="font-size: 12px; color: var(--gray-text); line-height: 1.4;">Vollständige Profile, Fotos und Kontaktdaten sind erst nach Anmeldung sichtbar.</span>
+          </div>
+          <div style="height: 8px;"></div>
+        </div>
+        <div class="bottom-nav">
+          <button class="nav-item active" onclick="showScreen('home')">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Start</span>
+          </button>
+          <button class="nav-item" onclick="showScreen('register')">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>Eintragen</span>
+          </button>
+          <button class="nav-item" onclick="showScreen('profile')">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Profil</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ════ SCREEN: REGISTER ════ -->
+      <div class="screen" id="screen-register">
+        <div class="form-header">
+          <h1>Pool beitreten</h1>
+          <p>Einmalig eintragen — wir melden uns bei Ihnen.</p>
+        </div>
+        <div class="form-body" id="form-body">
+
+          <div class="privacy-note">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Ende-zu-Ende-verschlüsselt via CryptPad. Ihre Daten gehören nur Ihnen.</span>
+          </div>
+
+          <!-- Embedded CryptPad Form -->
+          <div class="form-section-label" style="margin-top: 16px;">Registrierungsformular</div>
+          <div class="cryptpad-embed-wrap">
+            <div class="form-header" style="display:flex; align-items:center; gap:0.75rem; padding:12px 16px; background:var(--bordeaux); color:white; border-radius: var(--radius) var(--radius) 0 0;">
+              <div style="width:10px; height:10px; border-radius:50%; background:var(--mint); flex-shrink:0;"></div>
+              <div>
+                <strong style="display:block; font-size:0.9rem;">PalzCare Pool-Registrierung</strong>
+                <span style="font-size:0.75rem; opacity:0.8;">Ende-zu-Ende-verschlüsselt · DSGVO-konform</span>
+              </div>
+            </div>
+            <iframe
+              src="https://cryptpad.fr/form/#/2/form/view/rbFcWFP-pW-V0jlI0EhQtcupPxOw0iRtUwYd1zVliCg/embed/"
+              title="PalzCare Pool-Registrierung"
+              loading="lazy"
+              sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+            ></iframe>
+            <div class="embed-label">&#128274; Verschlüsselt via CryptPad · palzcare.de</div>
+          </div>
+
+          <div style="margin-top: 20px; background: var(--white); border-radius: var(--radius-sm); border: 1px solid var(--gray-mid); padding: 16px; text-align: center;">
+            <p style="font-size: 12px; color: var(--gray-text); margin-bottom: 8px; font-style: italic;">Noch nicht sicher? Kein Problem.</p>
+            <p style="font-size: 13px; color: var(--anthrazit); font-weight: 600; margin-bottom: 12px; line-height: 1.4;">Nehmen Sie an unserer kurzen Umfrage teil — das hilft uns enorm und dauert nur 2 Minuten.</p>
+            <a href="https://palzcare.de/umfrage/" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: var(--mint-pale); color: #3a9990; border: 1.5px solid var(--mint); border-radius: 20px; padding: 9px 20px; font-size: 13px; font-weight: 600; font-family: var(--font-sans); text-decoration: none;">
+              Zur Umfrage
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+
+        </div>
+        <div class="bottom-nav">
+          <button class="nav-item" onclick="showScreen('home')">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Start</span>
+          </button>
+          <button class="nav-item active" onclick="showScreen('register')">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>Eintragen</span>
+          </button>
+          <button class="nav-item" onclick="showScreen('profile')">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Profil</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ════ SCREEN: PROFILE ════ -->
+      <div class="screen" id="screen-profile">
+        <div class="profile-header">
+          <div class="profile-av">GK</div>
+          <div class="profile-name">Gülli K.</div>
+          <div class="profile-role">Gründerin · Maxdorf</div>
+        </div>
+        <div class="profile-body">
+          <div class="profile-section">
+            <h3>Mein Profil</h3>
+            <div class="profile-row">
+              <span>Rolle</span>
+              <span>Hilfe gesucht</span>
+            </div>
+            <div class="profile-row">
+              <span>Standort</span>
+              <span>Maxdorf</span>
+            </div>
+            <div class="profile-row">
+              <span>Mitglied seit</span>
+              <span>März 2026</span>
+            </div>
+            <div class="profile-row">
+              <span>Bewertung</span>
+              <span><span class="rating-stars">★★★★★</span> 5.0</span>
+            </div>
+          </div>
+          <div class="profile-section">
+            <h3>Verifikation</h3>
+            <div class="profile-row">
+              <span>Handynummer</span>
+              <span class="badge-verified">✓ Verifiziert</span>
+            </div>
+            <div class="profile-row">
+              <span>Führungszeugnis</span>
+              <span class="badge-pending">⌛ Ausstehend</span>
+            </div>
+            <div class="profile-row">
+              <span>Datenschutz</span>
+              <span class="badge-verified">✓ DSGVO</span>
+            </div>
+          </div>
+          <div class="profile-section">
+            <h3>Meine Hilfsanfragen</h3>
+            <div class="profile-row">
+              <span>Offene Anfragen</span>
+              <span>2</span>
+            </div>
+            <div class="profile-row">
+              <span>Abgeschlossen</span>
+              <span>7</span>
+            </div>
+          </div>
+          <div style="text-align: center; padding: 16px 0; display: flex; justify-content: center; gap: 20px;">
+            <a href="https://app.palzcare.de" target="_blank" style="color: var(--bordeaux); font-size: 13px; font-weight: 600; text-decoration: none;">app.palzcare.de →</a>
+            <a href="https://palzcare.de/blog" target="_blank" style="color: var(--mint); font-size: 13px; font-weight: 600; text-decoration: none;">Blog & Infos →</a>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <button class="nav-item" onclick="showScreen('home')">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Start</span>
+          </button>
+          <button class="nav-item" onclick="showScreen('register')">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>Eintragen</span>
+          </button>
+          <button class="nav-item active" onclick="showScreen('profile')">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Profil</span>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /phone -->
+  </div><!-- /phone-wrap -->
+
+  </div><!-- /stage -->
+
+
+
+<script>
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+
+  ['home','register','profile'].forEach(n => {
+    const btn = document.getElementById('nav-btn-' + n);
+    const dot = document.getElementById('dot-' + n);
+    if (btn) btn.classList.toggle('active-nav', n === name);
+    if (dot) { dot.classList.toggle('active', n === name); }
+  });
+}
+
+function setRole(role) {
+  document.getElementById('role-help').classList.toggle('active', role === 'help');
+  document.getElementById('role-helper').classList.toggle('active', role === 'helper');
+  const label = document.getElementById('card-label');
+  if (role === 'helper') {
+    label.textContent = 'Aktuelle Hilfe-Anfragen';
+    document.getElementById('cards-help').querySelector('.card-name').textContent = 'Anna F.';
+    document.getElementById('cards-help').querySelector('.card-meta').textContent = 'Maxdorf · Mutter · 3× pro Woche';
+  } else {
+    label.textContent = 'Aktuelle Helfer:innen';
+    document.getElementById('cards-help').querySelector('.card-name').textContent = 'Laura M.';
+    document.getElementById('cards-help').querySelector('.card-meta').textContent = 'Maxdorf · Studentin · ab €14/h';
+  }
+}
+</script>
+
+</body>
+</html>
 
